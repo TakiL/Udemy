@@ -45,15 +45,23 @@ app.post("/", function (req, res) {
     };
     request(options, function (error, response, body) {
         if (error) {
-            console.log(error);
-        } else {
-            console.log(response.statusCode);
+            res.sendFile(__dirname + "/failure.html");
+        } else  {
+            if (response.statusCode === 200) {
+                res.sendFile(__dirname + "/success.html")
+            } else {
+                res.sendFile(__dirname + "/failure.html");
+            }
         };
         
     });
 })
 
-app.listen(3000, function () {
+app.post("/failure", function(req,res){
+    res.redirect("/");
+})
+
+app.listen(process.env.PORT || 3000, function () {
     console.log("Server is running on port 3000")
 })
 
