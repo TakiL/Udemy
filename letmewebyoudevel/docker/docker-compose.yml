@@ -1,0 +1,42 @@
+version: '3.5'
+services:
+  web:
+    image: wordpress
+    container_name: LetMeWebYouDevel
+    links:
+      - mysql
+    ports:
+      - '8080:80'
+    environment:
+      - WORDPRESS_DATABASE=wordpress
+      - WORDPRESS_DB_USER=wp_LetMeWebYouDevel
+      - WORDPRESS_DB_PASSWORD=dfPSrCqWQNYxuKGyUk7z
+    working_dir: /var/www/html
+    volumes:
+      - ../webroot/:/var/www/html/
+    depends_on:
+      - mysql
+  mysql: 
+    image: mysql:5.7
+    container_name: LetMeWebYouDevel_mysql
+    environment:
+     - MYSQL_DATABASE=wordpress
+     - MYSQL_USER=wp_LetMeWebYouDevel
+     - MYSQL_PASSWORD=dfPSrCqWQNYxuKGyUk7z
+     - MYSQL_ROOT_PASSWORD=8QOhUNeEionrlCPzvGy9
+    volumes:
+      - ../db:/var/lib/mysql
+    ports:
+      - '3306:3306'
+
+  # phpmyadmin:
+  #   image: phpmyadmin/phpmyadmin
+  #   container_name: LetMeWebYouDevel_phpmyadmin
+  #   ports:
+  #    - 2999:80
+  #   volumes:
+  #    - /sessions
+  #   links:
+  #   - mysql:db
+# volumes:
+#   db:
