@@ -26,9 +26,16 @@ app.get("/", function (req, res) {
 
 app.post("/", function(req, res){
     let item = req.body.newItem;
-    items.push(item);
+    if (req.body.list === "Work") {
+        workItems.push(item);
+        res.redirect("/work");
+    } else {
+
+    
+    items.push(item); 
     res.redirect("/");
-    console.log(req.body);
+};
+    
 });
 
 
