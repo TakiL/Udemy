@@ -15,16 +15,37 @@ app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static("public"));
 
-
+//Home route
 app.get("/", function(req, res){
-  res.render("home");
+  res.render("home", {
+    StartingContent: homeStartingContent
+      })
 });
 
+//About route
+app.get("/about", function (req,res) {
+  res.render("about",{
+    about: aboutContent
+  })
+  });
 
+//Contact route
+app.get("/contact", function (req, res) { 
+  res.render("contact", {
+    contact: contactContent
+  });
+ })
 
+ //Compose route
+ app.get("/compose",function (req, res) {
+   res.render("compose")
+   });
 
-
-
+   //fuction for a post request coming from compose.ejs
+app.post("/compose", function (req, res) {
+  console.log(req.body.postTitle);
+  res.redirect("/compose");
+})
 
 
 
@@ -33,3 +54,4 @@ app.get("/", function(req, res){
 app.listen(3000, function() {
   console.log("Server started on port 3000");
 });
+

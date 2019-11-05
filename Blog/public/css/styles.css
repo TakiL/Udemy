@@ -33,3 +33,13 @@
 	font-size: 12px;
   color: #fff;
 }
+
+textarea {
+    margin-bottom: 10px;
+    margint-top: 10px;
+
+}
+
+p {
+    margin-top: 5px;
+}
