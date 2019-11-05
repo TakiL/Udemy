@@ -17,7 +17,7 @@ app.use(express.static("public"));
 
 
 app.get("/", function(req, res){
-  res.render("footer");
+  res.render("home");
 });
 
 
