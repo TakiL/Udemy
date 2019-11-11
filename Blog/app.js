@@ -25,7 +25,7 @@ app.use(
 app.use(express.static("public"));
 
 //Home route
-app.get("/", function(req, res) {
+app.get("/", function (req, res) {
   res.render("home", {
     StartingContent: homeStartingContent,
     posts: posts
@@ -33,29 +33,29 @@ app.get("/", function(req, res) {
 });
 
 //About route
-app.get("/about", function(req, res) {
+app.get("/about", function (req, res) {
   res.render("about", {
     about: aboutContent
   });
 });
 
 //Contact route
-app.get("/contact", function(req, res) {
+app.get("/contact", function (req, res) {
   res.render("contact", {
     contact: contactContent
   });
 });
 
 //Compose route
-app.get("/compose", function(req, res) {
+app.get("/compose", function (req, res) {
   res.render("compose");
 });
 
 //posts route dynamic topic
-app.get("/posts/:postName", function(req, res) {
+app.get("/posts/:postName", function (req, res) {
   const requestedTitle = _.lowerCase(req.params.postName);
 
-  posts.forEach(function(post) {
+  posts.forEach(function (post) {
     const storedTitle = _.lowerCase(post.title);
 
     if (requestedTitle === storedTitle) {
@@ -69,7 +69,7 @@ app.get("/posts/:postName", function(req, res) {
 });
 
 //fuction for a post request coming from compose.ejs
-app.post("/compose", function(req, res) {
+app.post("/compose", function (req, res) {
   const post = {
     title: req.body.postTitle,
     content: req.body.postBody
@@ -78,6 +78,6 @@ app.post("/compose", function(req, res) {
   res.redirect("/");
 });
 
-app.listen(3000, function() {
+app.listen(3000, function () {
   console.log("Server started on port 3000");
 });
