@@ -40,9 +40,13 @@ const Post = mongoose.model("Post", postSchema);
 
 
 app.get("/", function (req, res) {
-  res.render("home", {
-    startingContent: homeStartingContent,
-    posts: posts
+ 
+  Post.find({}, function(err,posts){
+    res.render("home", {
+      startingContent:homeStartingContent,
+      posts:posts
+    });
+    console.log(posts);
   });
 });
 
@@ -72,7 +76,11 @@ app.post("/compose", function (req, res) {
     content: postBody
   });
 
-  post.save();
+  post.save(function(err){
+    if (!err){
+      res.redirect("/");
+    }
+  });
 
   // const post = {
   //   consttitle: req.body.postTitle,
@@ -81,25 +89,37 @@ app.post("/compose", function (req, res) {
 
   // posts.push(post);
 
-  res.redirect("/compose");
+  res.redirect("/");
 
 });
 
-app.get("/posts/:postName", function (req, res) {
-  const requestedTitle = _.lowerCase(req.params.postName);
-
-  posts.forEach(function (post) {
-    const storedTitle = _.lowerCase(post.title);
-
-    if (storedTitle === requestedTitle) {
+app.get("/posts/:postId", function(req,res){
+  const idOfPost= req.params.postId;
+  Post.findOne({_id:idOfPost}, function(err, wantedList){
+    if (!err) {
       res.render("post", {
-        title: post.title,
-        content: post.content
+        title: wantedList.title,
+        content: wantedList.content
       });
-    }
+    };
   });
-
 });
+
+// app.get("/posts/:postId", function (req, res) {
+//   const requestedTitle = _.lowerCase(req.params.postName);
+
+//   posts.forEach(function (post) {
+//     const storedTitle = _.lowerCase(post.title);
+
+//     if (storedTitle === requestedTitle) {
+//       res.render("post", {
+//         title: post.title,
+//         content: post.content
+//       });
+//     }
+//   });
+
+// });
 
 app.listen(3000, function () {
   console.log("Server started on port 3000");
