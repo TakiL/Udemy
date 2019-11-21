@@ -110,7 +110,18 @@ app.route("/articles/:articleTitle")
       res.send(foundArticle)
     } else {res.send("No matching article has been found")};
   });
-});
+})
+.put(function(req,res){
+  Article.update(
+    {title:req.params.articleTitle},
+    {title:req.body.title,content:req.body.content},
+    {overwrite:true}, 
+    function(err,updatedArticle){
+if (!err){
+  res.send("Article has been updated")
+}else (res.send(err))
+    });
+})
 
 
 ////// Port and other settings///////////////////////////
