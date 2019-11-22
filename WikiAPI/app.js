@@ -5,11 +5,7 @@ const bodyParser = require("body-parser");
 const ejs = require("ejs");
 const mongoose = require("mongoose");
 
-
-
 const app = express();
-
-
 
 app.set("view engine", "ejs");
 
@@ -18,7 +14,6 @@ app.use(
     extended: true
   })
 );
-
 
 app.use(express.static("Public"));
 
@@ -61,7 +56,6 @@ const Article = mongoose.model("Article", articleSchema);
 
 // });
 
-
 // app.delete("/articles", function(req,res){
 // Article.deleteMany({},function(err){
 //   if (!err) {
@@ -70,61 +64,90 @@ const Article = mongoose.model("Article", articleSchema);
 // });
 // });
 
-
-
-app.route("/articles")
-  .get(function(req,res){
-    Article.find(function(err,foundArticles){
-      if (!err){
+app
+  .route("/articles")
+  .get(function(req, res) {
+    Article.find(function(err, foundArticles) {
+      if (!err) {
         res.send(foundArticles);
-      } else {res.send(err)}
-    })
+      } else {
+        res.send(err);
+      }
+    });
   })
-  .post(function (req, res) {
+  .post(function(req, res) {
     const newArticle = new Article({
       content: req.body.content,
       title: req.body.title
     });
-    newArticle.save(function (err) {
+    newArticle.save(function(err) {
       if (!err) {
-        res.send("Article has been saved")
-      } else(res.send(err));
-    })
+        res.send("Article has been saved");
+      } else res.send(err);
+    });
   })
-  .delete(function (req, res) {
-    Article.deleteMany({}, function (err) {
+  .delete(function(req, res) {
+    Article.deleteMany({}, function(err) {
       if (!err) {
-        res.send("Articles has been deleted")
-      } else(res.send(err))
+        res.send("Articles has been deleted");
+      } else res.send(err);
     });
   });
 
+//Requests targeting specific articles
 
-  //Requests targeting specific articles 
-
-app.route("/articles/:articleTitle")
-.get(function(req,res){
-  
-  Article.findOne({title:req.params.articleTitle},function(err,foundArticle){
-    if (foundArticle) {
-      res.send(foundArticle)
-    } else {res.send("No matching article has been found")};
-  });
-})
-.put(function(req,res){
-  Article.update(
-    {title:req.params.articleTitle},
-    {title:req.body.title,content:req.body.content},
-    {overwrite:true}, 
-    function(err,updatedArticle){
-if (!err){
-  res.send("Article has been updated")
-}else (res.send(err))
+app
+  .route("/articles/:articleTitle")
+  .get(function(req, res) {
+    Article.findOne({ title: req.params.articleTitle }, function(
+      err,
+      foundArticle
+    ) {
+      if (foundArticle) {
+        res.send(foundArticle);
+      } else {
+        res.send("No matching article has been found");
+      }
     });
-})
+  })
+  .put(function(req, res) {
+    Article.update(
+      { title: req.params.articleTitle },
+      { title: req.body.title, content: req.body.content },
+      { overwrite: true },
+      function(err, updatedArticle) {
+        if (!err) {
+          res.send("Article has been updated");
+        } else res.send(err);
+      }
+    );
+  })
 
+  .patch(function(req, res) {
+    Article.update(
+      { title: req.params.articleTitle },
+      { $set: req.body },
+      function(err) {
+        if (!err) {
+          res.send("Successfully updated article");
+        } else {
+          res.send(err);
+        }
+      }
+    );
+  })
+
+  .delete(function(req, res) {
+    Article.deleteOne({ title: req.params.articleTitle }, function(err) {
+      if (!err) {
+        res.send("Article has been deleted");
+      } else {
+        res.send(err);
+      }
+    });
+  });
 
 ////// Port and other settings///////////////////////////
-app.listen(3000, function () {
+app.listen(3000, function() {
   console.log("App is up and running");
 });
